@@ -14,4 +14,12 @@ export default abstract class MongoODM<T> {
   public async create(obj: T): Promise<T> {
     return this.model.create({ ...obj });
   }
+
+  public async getAll(): Promise<T[]> {
+    return this.model.find();
+  }
+
+  public async getById(_id: string): Promise<T | null> {
+    return this.model.findById({ _id });
+  }
 }

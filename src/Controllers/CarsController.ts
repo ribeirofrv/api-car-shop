@@ -16,17 +16,17 @@ export default class CarsController {
   }
 
   public async createCar(): Promise<Response | undefined> {
-    const car: ICar = {
-      model: this.request.body.model,
-      year: this.request.body.year,
-      color: this.request.body.color,
-      status: this.request.body.status,
-      buyValue: this.request.body.buyValue,
-      doorsQty: this.request.body.doorsQty,
-      seatsQty: this.request.body.seatsQty,
-    };
-
     try {
+      const car: ICar = {
+        model: this.request.body.model,
+        year: this.request.body.year,
+        color: this.request.body.color,
+        status: this.request.body.status,
+        buyValue: this.request.body.buyValue,
+        doorsQty: this.request.body.doorsQty,
+        seatsQty: this.request.body.seatsQty,
+      };
+
       const newCar = await this.service.createCar(car);
       return this.response.status(201).json(newCar);
     } catch (error) {
@@ -49,6 +49,25 @@ export default class CarsController {
     try {
       const car = await this.service.getCarById(id);
       return this.response.status(200).json(car);
+    } catch (error) {
+      this.next(error);
+    }
+  }
+
+  public async updateCar(): Promise<Response | undefined> {
+    try {
+      const { id } = this.request.params;
+      const car: ICar = {
+        model: this.request.body.model,
+        year: this.request.body.year,
+        color: this.request.body.color,
+        status: this.request.body.status,
+        buyValue: this.request.body.buyValue,
+        doorsQty: this.request.body.doorsQty,
+        seatsQty: this.request.body.seatsQty,
+      };
+      const updatedCar = await this.service.updateCar(id, car);
+      return this.response.status(200).json(updatedCar);
     } catch (error) {
       this.next(error);
     }

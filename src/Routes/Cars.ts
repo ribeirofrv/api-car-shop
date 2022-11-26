@@ -8,6 +8,8 @@ carsRouter.post('/cars', (req, res, next) =>
   .get('/cars', (req, res, next) =>
     new CarsController(req, res, next).getCars())
   .get('/cars/:id', (req, res, next) =>
-    new CarsController(req, res, next).getCarById());
+    new CarsController(req, res, next).getCarById())
+  .put('/cars/:id', (req, res, next) =>
+    new CarsController(req, res, next).updateCar());
 
 export default carsRouter;

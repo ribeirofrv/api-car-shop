@@ -22,4 +22,9 @@ export default abstract class MongoODM<T> {
   public async getById(_id: string): Promise<T | null> {
     return this.model.findById({ _id });
   }
+
+  /** https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype */
+  public async updateById(_id: string, vehicle: Partial<T>): Promise<T | null> {
+    return this.model.findByIdAndUpdate({ _id }, vehicle, { new: true });
+  }
 }

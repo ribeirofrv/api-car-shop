@@ -33,4 +33,23 @@ export default class MotorcycleController {
       this.next(error);
     }
   }
+
+  public async getMotorcycles(): Promise<Response | undefined> {
+    try {
+      const motorcycles = await this.service.getMotorcycles();
+      return this.response.status(200).json(motorcycles);
+    } catch (error) {
+      this.next(error);
+    }
+  }
+
+  public async getMotorcycleById(): Promise<Response | undefined> {
+    try {
+      const { id } = this.request.params;
+      const motorcycle = await this.service.getMotorcycleById(id);
+      return this.response.status(200).json(motorcycle);
+    } catch (error) {
+      this.next(error);
+    }
+  }
 }

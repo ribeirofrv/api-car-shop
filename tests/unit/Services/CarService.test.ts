@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-// import { Model } from 'mongoose';
+import { Model } from 'mongoose';
 
 import CarService from '../../../src/Services/CarService';
 import ICar from '../../../src/Interfaces/ICar';
@@ -14,11 +14,12 @@ describe('CarService', function () {
   });
 
   describe('createCar', function () {
-    it('should return a Car', async function () {
+    it('should create a Car', async function () {
       const car: ICar = {
         model: 'Marea',
         year: 2002,
-        color: 'Red',
+        color: 'Black',
+        status: true,
         buyValue: 15.990,
         doorsQty: 4,
         seatsQty: 5,
@@ -26,50 +27,53 @@ describe('CarService', function () {
 
       const carDomain = new Car(car);
 
-      const carODM = {
-        create: sinon.stub().resolves(car),
-      };
+      sinon.stub(Model, 'create').resolves(car);
 
-      sinon.stub(carService, 'carODM').get(() => carODM);
+      const createdCar = await carService.createCar(car);
 
-      const result = await carService.createCar(car);
-
-      expect(result).to.be.deep.equal(carDomain);
+      expect(createdCar).to.deep.equal(carDomain);
     });
   });
 
   describe('getCars', function () {
-    it('should return an array of Car', async function () {
-      const car: ICar = {
-        model: 'Marea',
-        year: 2002,
-        color: 'Red',
-        buyValue: 15.990,
-        doorsQty: 4,
-        seatsQty: 5,
-      };
+    it('should return an array of Cars', async function () {
+      const carsArray: ICar[] = [
+        {
+          model: 'Marea',
+          year: 2002,
+          color: 'Black',
+          status: true,
+          buyValue: 15.990,
+          doorsQty: 4,
+          seatsQty: 5,
+        },
+        {
+          model: 'Tempra',
+          year: 1995,
+          color: 'Black',
+          buyValue: 39.000,
+          doorsQty: 2,
+          seatsQty: 5,
+        },
+      ];
 
-      const carDomain = new Car(car);
+      const carsDomainArray = carsArray.map((car) => new Car(car));
 
-      const carODM = {
-        getAll: sinon.stub().resolves([car]),
-      };
+      sinon.stub(Model, 'find').resolves(carsArray);
 
-      sinon.stub(carService, 'carODM').get(() => carODM);
+      const cars = await carService.getCars();
 
-      const result = await carService.getCars();
-
-      expect(result).to.be.deep.equal([carDomain]);
+      expect(cars).to.deep.equal(carsDomainArray);
     });
   });
 
   describe('getCarById', function () {
-    it('should return a car', async function () {
-      const car = {
-        id: '638188346e8b6f22d8bcef7e',
+    it('should return one car by id', async function () {
+      const car: ICar = {
         model: 'Marea',
         year: 2002,
-        color: 'Red',
+        color: 'Black',
+        status: true,
         buyValue: 15.990,
         doorsQty: 4,
         seatsQty: 5,
@@ -77,15 +81,11 @@ describe('CarService', function () {
 
       const carDomain = new Car(car);
 
-      const carODM = {
-        getById: sinon.stub().resolves(car),
-      };
+      sinon.stub(Model, 'findById').resolves(car);
 
-      sinon.stub(carService, 'carODM').get(() => carODM);
+      const foundCar = await carService.getCarById('638188346e8b6f22d8bcef7e');
 
-      const result = await carService.getCarById('638188346e8b6f22d8bcef7e');
-
-      expect(result).to.be.deep.equal(carDomain);
+      expect(foundCar).to.deep.equal(carDomain);
     });
   });
 });

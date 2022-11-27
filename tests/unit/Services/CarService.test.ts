@@ -88,4 +88,26 @@ describe('CarService', function () {
       expect(foundCar).to.deep.equal(carDomain);
     });
   });
+
+  describe('updateCar', function () {
+    it('should update one car by id', async function () {
+      const car: ICar = {
+        model: 'Marea',
+        year: 2002,
+        color: 'Black',
+        status: true,
+        buyValue: 15.990,
+        doorsQty: 4,
+        seatsQty: 5,
+      };
+
+      const carDomain = new Car(car);
+
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(car);
+
+      const updatedCar = await carService.updateCar('638188346e8b6f22d8bcef7e', car);
+
+      expect(updatedCar).to.deep.equal(carDomain);
+    });
+  });
 });

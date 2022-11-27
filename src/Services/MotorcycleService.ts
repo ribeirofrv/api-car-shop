@@ -38,4 +38,14 @@ export default class MotorcycleService {
     
     return this.createMotorcycleDomain(motorcycle);
   }
+
+  public async updateMotorcycle(id: string, moto: IMotorcycle) {
+    if (!isValidObjectId(id)) throw new UnprocessableEntityError('Invalid mongo id');
+
+    const updatedMotorcycle = await this.MotorcycleODM.updateById(id, moto);
+
+    if (!updatedMotorcycle) throw new NotFoundError('Motorcycle not found');
+
+    return this.createMotorcycleDomain(updatedMotorcycle);
+  }
 }
